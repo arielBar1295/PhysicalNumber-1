@@ -23,6 +23,9 @@ int main() {
     PhysicalNumber b(300, Unit::M);
     PhysicalNumber c(2, Unit::HOUR);
     PhysicalNumber d(30, Unit::MIN);
+    
+    PhysicalNumber Gram(30, Unit::G);
+    PhysicalNumber Cm(30, Unit::CM);
 
     testcase
     .setname("Basic output")
@@ -44,6 +47,7 @@ int main() {
     .CHECK_THROWS(a+d)
     .CHECK_THROWS(b+c)
     .CHECK_THROWS(b+d)
+    
 
     .setname("Basic input")
     .CHECK_OK(istringstream("700[kg]") >> a)
@@ -51,7 +55,28 @@ int main() {
 
     // YOUR TESTS - INSERT AS MANY AS YOU WANT
 
-      .setname("...")
+      .setname("Should not work")
+      .CHECK_THROWS(Gram+Cm)
+      .CHECK_THROWS(Cm+Gram)
+      .CHECK_THROWS(Gram+=Cm)
+      .CHECK_THROWS(Cm+=Gram)
+      .CHECK_THROWS(Cm-=Gram)
+      .CHECK_THROWS(Gram-=Cm)
+      .CHECK_THROWS(Cm-Gram)
+      .CHECK_THROWS(Gram-Cm)
+
+      .setname("Should work")
+      .CHECK_OUTPUT(++Gram, "31[g]")
+      .CHECK_OUTPUT(--Gram, "30[g]")
+      .CHECK_OUTPUT(--Cm, "29[cm]")
+      .CHECK_OUTPUT(++Cm, "30[cm]")
+      .CHECK_OUTPUT((Gram+=Gram), "60[g]")
+      .CHECK_OUTPUT((Cm+=Cm), "60[cm]")
+      .CHECK_OUTPUT((-Gram),"-60[cm]")
+      .CHECK_OK(+Gram)
+      .CHECK_OUTPUT(Gram-Gram,"0[g]")
+      .CHECK_OUTPUT(Cm-Cm,"0[cm]")
+
 
       .print(cout, /*show_grade=*/false);
       grade = testcase.grade();

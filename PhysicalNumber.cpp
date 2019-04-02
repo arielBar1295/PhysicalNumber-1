@@ -62,8 +62,8 @@ bool PhysicalNumber::operator<(const PhysicalNumber &b) {return true;}
 bool PhysicalNumber::operator!=(const PhysicalNumber &b) {return true;}
 bool PhysicalNumber::operator==(const PhysicalNumber &b) {return true;}
 
-PhysicalNumber& PhysicalNumber::operator++() {}
-PhysicalNumber& PhysicalNumber::operator--() {}
+PhysicalNumber& PhysicalNumber::operator++() {return *this;}
+PhysicalNumber& PhysicalNumber::operator--() {return *this;}
 
 // istream& operator>>(istream &os, const PhysicalNumber &a) {}
 
