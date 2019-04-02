@@ -2,11 +2,12 @@
 
 using namespace ariel;
 
-PhysicalNumber::PhysicalNumber(double value, Unit unit)
+PhysicalNumber::PhysicalNumber(double value, Unit unit) 
 {
     this->value = value;
     this->unit = unit;
     name = getEnumName(unit);
+    
 }
 
 PhysicalNumber PhysicalNumber::operator+(const PhysicalNumber &b)
