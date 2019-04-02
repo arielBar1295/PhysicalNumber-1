@@ -1,6 +1,5 @@
 #include "PhysicalNumber.h"
 
-
 using namespace ariel;
 
     PhysicalNumber::PhysicalNumber(double value, Unit unit) {
@@ -14,26 +13,17 @@ using namespace ariel;
              throw std::runtime_error("Not same units!");
 
         double newValue;
-        if(b.unit == unit) {
-            newValue = b.value + value;
-        }
-        else if(b.unit > unit) {
-            if(b.unit/3==0) {
-                
-            }
-            else if(b.unit/3 == 1) {
-                newValue = WTconvertDivision(b.value,b.unit-unit,60) + value;
-            }
-            else {
-                newValue = WTconvertDivision(b.value,b.unit-unit,1000) + value;
+        switch(unit/3) {
+           // case 0 :
 
-            }
-        }
-        else {
-            
+            case 1 :
+           newValue =  secTo(unit,toSec(b.unit,b.value)) + value;
+            break;
+            // case 2 :
         }
 
-        
+        PhysicalNumber a(newValue,unit);
+        return a;
     }
 
     PhysicalNumber& PhysicalNumber::operator+=(const PhysicalNumber &b) {
@@ -74,6 +64,26 @@ using namespace ariel;
         
     }
 
-    double PhysicalNumber::WTconvertDivision(double value,int times, int units) {
+    double PhysicalNumber::secTo(Unit type, double value) {
+        switch(type) {
+            case 4 :
+            return value/60;
+ 
+            case 5 :
+            return value/3600;
+            default : return value;
+        }
 
     }
+
+        double PhysicalNumber::toSec(Unit type, double value) {
+        switch(type) {
+            case 4 :
+            return value*60;
+            case 5 :
+            return value*3600;
+            default : return value;
+        }
+
+    }
+

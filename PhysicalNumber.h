@@ -27,7 +27,7 @@ class PhysicalNumber
     Unit unit;
 
     public:
-    PhysicalNumber(double value, ariel::Unit unit);
+    PhysicalNumber(double value, Unit unit);
 
     PhysicalNumber operator+(const PhysicalNumber &b);
     PhysicalNumber& operator+=(const PhysicalNumber &b);
@@ -55,8 +55,10 @@ class PhysicalNumber
 
     private:
     bool sameUnits(const PhysicalNumber &b);
-    double WTconvertDivision(double value,int times, int units);
-    double LconvertDivision(double value,int times);
+     double secTo(Unit type, double value);
+     double toSec(Unit type, double value);
+    
 };
+
 
 } // namespace ariel
