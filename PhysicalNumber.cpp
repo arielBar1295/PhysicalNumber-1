@@ -36,31 +36,36 @@ PhysicalNumber PhysicalNumber::operator+(const PhysicalNumber &b)
 
 PhysicalNumber &PhysicalNumber::operator+=(const PhysicalNumber &b)
 {
+    return *this;
 }
 PhysicalNumber PhysicalNumber::operator+()
 {
+    return *this;
 }
 PhysicalNumber PhysicalNumber::operator-(const PhysicalNumber &b)
 {
+    return *this;
 }
-PhysicalNumber &PhysicalNumber::operator-=(const PhysicalNumber &b)
+PhysicalNumber& PhysicalNumber::operator-=(const PhysicalNumber &b)
 {
+    return *this;
 }
 PhysicalNumber PhysicalNumber::operator-()
 {
+    return *this;
 }
 
-bool PhysicalNumber::operator>=(const PhysicalNumber &b) {}
-bool PhysicalNumber::operator>(const PhysicalNumber &b) {}
-bool PhysicalNumber::operator<=(const PhysicalNumber &b) {}
-bool PhysicalNumber::operator<(const PhysicalNumber &b) {}
-bool PhysicalNumber::operator!=(const PhysicalNumber &b) {}
-bool PhysicalNumber::operator==(const PhysicalNumber &b) {}
+bool PhysicalNumber::operator>=(const PhysicalNumber &b) {return true;}
+bool PhysicalNumber::operator>(const PhysicalNumber &b) {return true;}
+bool PhysicalNumber::operator<=(const PhysicalNumber &b) {return true;}
+bool PhysicalNumber::operator<(const PhysicalNumber &b) {return true;}
+bool PhysicalNumber::operator!=(const PhysicalNumber &b) {return true;}
+bool PhysicalNumber::operator==(const PhysicalNumber &b) {return true;}
 
-PhysicalNumber &PhysicalNumber::operator++() {}
-PhysicalNumber &PhysicalNumber::operator--() {}
+PhysicalNumber& PhysicalNumber::operator++() {}
+PhysicalNumber& PhysicalNumber::operator--() {}
 
-istream& operator>>(istream &os, const PhysicalNumber &a) {}
+// istream& operator>>(istream &os, const PhysicalNumber &a) {}
 
 // std::ostream& operator<<(ostream &os, const PhysicalNumber &a) {
 //     os << a.getValue() <<"["<< a.getName() << "]";

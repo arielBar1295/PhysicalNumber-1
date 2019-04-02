@@ -6,7 +6,7 @@ using namespace std;
 
 namespace ariel
 {
-const static string const names[] = {"cm", "m", "km", "sec", "min", "hour", "g", "kg", "ton"};
+static string const names[] = {"cm", "m", "km", "sec", "min", "hour", "g", "kg", "ton"};
 
 class PhysicalNumber
 {
@@ -35,7 +35,7 @@ public:
   PhysicalNumber &operator++();
   PhysicalNumber &operator--();
 
-  friend istream &operator>>(istream &os, const PhysicalNumber &a);
+  friend istream &operator>>(istream &is, const PhysicalNumber &a) {return is;}
   friend ostream &operator<<(ostream &os, const PhysicalNumber &a)
   {
     os << a.getValue() << "[" << a.getName() << "]";
