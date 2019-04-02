@@ -1,7 +1,15 @@
+#include <string>
+
+
+#ifndef enumName.cpp
+#define enumName.cpp
+
 using namespace std;
 
-string names[] ={"CM","m","km","sec","min","hour","g","kg","ton"};
+string static names[] ={"CM","m","km","sec","min","hour","g","kg","ton"};
 
-string getEnumName(int i) {
+string static getEnumName(int i) {
     return names[i];
 }
+
+#endif

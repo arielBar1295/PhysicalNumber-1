@@ -1,4 +1,6 @@
 #include <iostream>
+#include "enumName.cpp"
+#include <string>
 
 using namespace std;
 
@@ -46,7 +48,10 @@ class PhysicalNumber
     PhysicalNumber &operator--();
 
     friend istream &operator>>(istream &os, const PhysicalNumber &a);
-    friend ostream &operator<<(ostream &os, const PhysicalNumber &a);
+    friend ostream &operator<<(ostream &os, const PhysicalNumber &a) {
+                os << a.getValue() <<"["<< a.getName() << "]";
+    return os;
+    }
 
     Unit getUnit() { return unit; }
     double getValue() const { return value; }

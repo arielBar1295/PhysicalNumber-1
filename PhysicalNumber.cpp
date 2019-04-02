@@ -1,5 +1,4 @@
 #include "PhysicalNumber.h"
-#include "enumName.cpp"
 
 using namespace ariel;
 
@@ -20,12 +19,13 @@ PhysicalNumber PhysicalNumber::operator+(const PhysicalNumber &b)
     {
     case 0 :
         newValue = CMto(unit, toCM(b.unit, b.value)) + value;
-
+        break;
     case 1 :
         newValue = secTo(unit, toSec(b.unit, b.value)) + value;
         break;
         case 2 :
         newValue = Gto(unit, toG(b.unit, b.value)) + value;
+        break;
 
     }
 
@@ -59,11 +59,12 @@ bool PhysicalNumber::operator==(const PhysicalNumber &b) {}
 PhysicalNumber &PhysicalNumber::operator++() {}
 PhysicalNumber &PhysicalNumber::operator--() {}
 
-istream &operator>>(istream &os, const PhysicalNumber &a) {}
-ostream &operator<<(ostream &os, const PhysicalNumber &a) {
-    os << a.getValue() <<"["<< a.getName() << "]";
-    return os;
-}
+istream& operator>>(istream &os, const PhysicalNumber &a) {}
+
+// std::ostream& operator<<(ostream &os, const PhysicalNumber &a) {
+//     os << a.getValue() <<"["<< a.getName() << "]";
+//     return os;
+// }
 
 bool PhysicalNumber::sameUnits(const PhysicalNumber &b)
 {
