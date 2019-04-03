@@ -15,7 +15,6 @@ PhysicalNumber PhysicalNumber::operator+(const PhysicalNumber &b)
         throw std::runtime_error("Not same units!");
 
     double newValue = value + addSubstruct(b);
-
     PhysicalNumber result(newValue, unit);
     return result;
 }
@@ -105,13 +104,6 @@ PhysicalNumber &PhysicalNumber::operator--()
     value--;
     return *this;
 }
-
-// istream& operator>>(istream &os, const PhysicalNumber &a) {}
-
-// std::ostream& operator<<(ostream &os, const PhysicalNumber &a) {
-//     os << a.getValue() <<"["<< a.getName() << "]";
-//     return os;
-// }
 
 bool PhysicalNumber::sameUnits(const PhysicalNumber &b) const
 {
@@ -219,7 +211,7 @@ void PhysicalNumber::normalize(double &a, double &b, const PhysicalNumber &other
     }
 }
 
-int PhysicalNumber::addSubstruct(const PhysicalNumber &b)
+double PhysicalNumber::addSubstruct(const PhysicalNumber &b)
 {
     double newValue;
     switch (unit / 3)
@@ -235,4 +227,28 @@ int PhysicalNumber::addSubstruct(const PhysicalNumber &b)
         break;
     }
     return newValue;
+}
+
+std::ostream &ariel::operator<<(ostream &os, const PhysicalNumber &a)
+{
+    os << a.getValue() << "[" << a.getName() << "]";
+    return os;
+}
+std::istream &ariel::operator>>(istream &is, PhysicalNumber &a)
+{
+    string s;
+    is >> s;
+    int n = s.find("[");
+    double val = 0;
+    for (int i = 0; i < n; i++)
+    {
+        val = val * 10 + (s[i] - '0');
+    }
+    int n2 = s.find("]");
+
+    string s2 = s.substr(n + 1, n2 - n - 1);
+
+    a.setValue(val);
+    cout << s2 << " " << n2 - n << endl;
+    return is;
 }

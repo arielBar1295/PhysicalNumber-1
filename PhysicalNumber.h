@@ -19,10 +19,10 @@ public:
   PhysicalNumber(double value, Unit unit);
 
   PhysicalNumber operator+(const PhysicalNumber &b);
-  PhysicalNumber &operator+=(const PhysicalNumber &b);
+  PhysicalNumber& operator+=(const PhysicalNumber &b);
   PhysicalNumber operator+() const;
   PhysicalNumber operator-(const PhysicalNumber &b);
-  PhysicalNumber &operator-=(const PhysicalNumber &b);
+  PhysicalNumber& operator-=(const PhysicalNumber &b);
   PhysicalNumber operator-();
 
   bool operator>=(const PhysicalNumber &b);
@@ -32,19 +32,17 @@ public:
   bool operator!=(const PhysicalNumber &b);
   bool operator==(const PhysicalNumber &b);
 
-  PhysicalNumber &operator++();
-  PhysicalNumber &operator--();
+  PhysicalNumber& operator++();
+  PhysicalNumber& operator--();
 
-  friend istream &operator>>(istream &is, const PhysicalNumber &a) {return is;}
-  friend ostream &operator<<(ostream &os, const PhysicalNumber &a)
-  {
-    os << a.getValue() << "[" << a.getName() << "]";
-    return os;
-  }
+  friend istream& operator>>(istream &is,  PhysicalNumber& a);
+  friend ostream& operator<<(ostream& os, const PhysicalNumber& a);
 
   Unit getUnit() { return unit; }
   double getValue() const { return value; }
   string getName() const { return name; }
+  void setValue(double value) {this->value = value;}
+  void setUnit(Unit unit) {this->unit = unit;}
 
 private:
   bool sameUnits(const PhysicalNumber &b) const;
@@ -54,7 +52,7 @@ private:
   double CMto(Unit type, double value) const;
   double toG(Unit type, double value) const;
   double Gto(Unit type, double value) const;
-  int addSubstruct(const PhysicalNumber &b);
+  double addSubstruct(const PhysicalNumber &b);
   void normalize(double& a, double& b,const PhysicalNumber& other);
 
 
@@ -62,6 +60,7 @@ private:
   {
     return names[i];
   }
+
 };
 
 } // namespace ariel

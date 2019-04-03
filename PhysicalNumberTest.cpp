@@ -80,7 +80,7 @@ int main() {
       .CHECK_OUTPUT(++Cm, "30[cm]")
       .CHECK_OUTPUT((Gram+=Gram), "60[g]")
       .CHECK_OUTPUT((Cm+=Cm), "60[cm]")
-      .CHECK_OUTPUT((-Gram),"-60[cm]")
+      .CHECK_OUTPUT((-Gram),"-60[g]")
       .CHECK_OK(+Gram)
       .CHECK_OUTPUT(Gram-Gram,"0[g]")
       .CHECK_OUTPUT(Cm-Cm,"0[cm]")
