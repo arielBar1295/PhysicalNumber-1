@@ -1,6 +1,7 @@
 #include <iostream>
 #include "Unit.h"
 #include <string>
+#define size 8
 
 using namespace std;
 
@@ -41,8 +42,7 @@ public:
   Unit getUnit() { return unit; }
   double getValue() const { return value; }
   string getName() const { return name; }
-  void setValue(double value) {this->value = value;}
-  void setUnit(Unit unit) {this->unit = unit;}
+
 
 private:
   bool sameUnits(const PhysicalNumber &b) const;
