@@ -20,7 +20,7 @@ public:
 
   PhysicalNumber operator+(const PhysicalNumber &b);
   PhysicalNumber &operator+=(const PhysicalNumber &b);
-  PhysicalNumber operator+();
+  PhysicalNumber operator+() const;
   PhysicalNumber operator-(const PhysicalNumber &b);
   PhysicalNumber &operator-=(const PhysicalNumber &b);
   PhysicalNumber operator-();
@@ -47,13 +47,16 @@ public:
   string getName() const { return name; }
 
 private:
-  bool sameUnits(const PhysicalNumber &b);
-  double secTo(Unit type, double value);
-  double toSec(Unit type, double value);
-  double toCM(Unit type, double value);
-  double CMto(Unit type, double value);
-  double toG(Unit type, double value);
-  double Gto(Unit type, double value);
+  bool sameUnits(const PhysicalNumber &b) const;
+  double secTo(Unit type, double value) const;
+  double toSec(Unit type, double value) const;
+  double toCM(Unit type, double value) const;
+  double CMto(Unit type, double value) const;
+  double toG(Unit type, double value) const;
+  double Gto(Unit type, double value) const;
+  int addSubstruct(const PhysicalNumber &b);
+  void normalize(double& a, double& b,const PhysicalNumber& other);
+
 
   string getEnumName(int i)
   {

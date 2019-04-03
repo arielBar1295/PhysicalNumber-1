@@ -14,75 +14,97 @@ PhysicalNumber PhysicalNumber::operator+(const PhysicalNumber &b)
     if (!sameUnits(b))
         throw std::runtime_error("Not same units!");
 
-    double newValue;
-    switch (unit / 3)
-    {
-    case 0:
-        newValue = CMto(unit, toCM(b.unit, b.value)) + value;
-        break;
-    case 1:
-        newValue = secTo(unit, toSec(b.unit, b.value)) + value;
-        break;
-    case 2:
-        newValue = Gto(unit, toG(b.unit, b.value)) + value;
-        break;
-    }
+    double newValue = value + addSubstruct(b);
 
-    PhysicalNumber a(newValue, unit);
-    return a;
+    PhysicalNumber result(newValue, unit);
+    return result;
 }
 
 PhysicalNumber &PhysicalNumber::operator+=(const PhysicalNumber &b)
 {
+    PhysicalNumber temp = (*this + b);
+    value = temp.value;
+
     return *this;
 }
-PhysicalNumber PhysicalNumber::operator+()
+PhysicalNumber PhysicalNumber::operator+() const
 {
     return *this;
 }
 PhysicalNumber PhysicalNumber::operator-(const PhysicalNumber &b)
 {
-    return *this;
+    if (!sameUnits(b))
+        throw std::runtime_error("Not same units!");
+
+    double newValue = value - addSubstruct(b);
+
+    PhysicalNumber result(newValue, unit);
+    return result;
 }
 PhysicalNumber &PhysicalNumber::operator-=(const PhysicalNumber &b)
 {
+    PhysicalNumber temp = (*this - b);
+    value = temp.value;
+
     return *this;
 }
 PhysicalNumber PhysicalNumber::operator-()
 {
-    return *this;
+    PhysicalNumber result((this->value) * -1, this->unit);
+    return result;
 }
 
-bool PhysicalNumber::operator>=(const PhysicalNumber &b) { return true; }
-bool PhysicalNumber::operator>(const PhysicalNumber &b)
+bool PhysicalNumber::operator>=(const PhysicalNumber &b)
 {
     if (!sameUnits(b))
         throw std::runtime_error("Not same units!");
+
     double aValue;
     double myValue;
-    switch (unit / 3)
-    {
-    case 0:
-        aValue = toCM(b.unit, b.value);
-        myValue = toCM(unit,value);
-        break;
-    case 1:
-        aValue = toSec(b.unit, b.value);
-        myValue = toSec(unit,value);        break;
-    case 2:
-        aValue = toG(b.unit, b.value);
-        myValue = toG(unit,value);        break;
-    }
-    
+    normalize(myValue, aValue, b);
 
+    return myValue >= aValue;
 }
-bool PhysicalNumber::operator<=(const PhysicalNumber &b) { return true; }
-bool PhysicalNumber::operator<(const PhysicalNumber &b) { return true; }
-bool PhysicalNumber::operator!=(const PhysicalNumber &b) { return true; }
-bool PhysicalNumber::operator==(const PhysicalNumber &b) { return true; }
 
-PhysicalNumber &PhysicalNumber::operator++() { return *this; }
-PhysicalNumber &PhysicalNumber::operator--() { return *this; }
+bool PhysicalNumber::operator>(const PhysicalNumber &b)
+{
+    return !(*this <= b);
+}
+bool PhysicalNumber::operator<=(const PhysicalNumber &b)
+{
+    if (!sameUnits(b))
+        throw std::runtime_error("Not same units!");
+
+    double aValue;
+    double myValue;
+    normalize(myValue, aValue, b);
+
+    return myValue <= aValue;
+}
+bool PhysicalNumber::operator<(const PhysicalNumber &b)
+{
+    return !(*this >= b);
+}
+bool PhysicalNumber::operator!=(const PhysicalNumber &b)
+{
+    return (*this > b) || (*this < b);
+}
+bool PhysicalNumber::operator==(const PhysicalNumber &b)
+{
+
+    return !(*this < b) && !(*this > b);
+}
+
+PhysicalNumber &PhysicalNumber::operator++()
+{
+    value++;
+    return *this;
+}
+PhysicalNumber &PhysicalNumber::operator--()
+{
+    value--;
+    return *this;
+}
 
 // istream& operator>>(istream &os, const PhysicalNumber &a) {}
 
@@ -91,7 +113,7 @@ PhysicalNumber &PhysicalNumber::operator--() { return *this; }
 //     return os;
 // }
 
-bool PhysicalNumber::sameUnits(const PhysicalNumber &b)
+bool PhysicalNumber::sameUnits(const PhysicalNumber &b) const
 {
     int bgroupUnit = b.unit / 3;
     int agroupUnit = unit / 3;
@@ -101,7 +123,7 @@ bool PhysicalNumber::sameUnits(const PhysicalNumber &b)
     return false;
 }
 
-double PhysicalNumber::secTo(Unit type, double value)
+double PhysicalNumber::secTo(Unit type, double value) const
 {
     switch (type)
     {
@@ -115,7 +137,7 @@ double PhysicalNumber::secTo(Unit type, double value)
     }
 }
 
-double PhysicalNumber::toSec(Unit type, double value)
+double PhysicalNumber::toSec(Unit type, double value) const
 {
     switch (type)
     {
@@ -128,7 +150,7 @@ double PhysicalNumber::toSec(Unit type, double value)
     }
 }
 
-double PhysicalNumber::toCM(Unit type, double value)
+double PhysicalNumber::toCM(Unit type, double value) const
 {
     switch (type)
     {
@@ -140,7 +162,7 @@ double PhysicalNumber::toCM(Unit type, double value)
         return value;
     }
 }
-double PhysicalNumber::CMto(Unit type, double value)
+double PhysicalNumber::CMto(Unit type, double value) const
 {
     switch (type)
     {
@@ -153,7 +175,7 @@ double PhysicalNumber::CMto(Unit type, double value)
     }
 }
 
-double PhysicalNumber::toG(Unit type, double value)
+double PhysicalNumber::toG(Unit type, double value) const
 {
     switch (type)
     {
@@ -165,7 +187,7 @@ double PhysicalNumber::toG(Unit type, double value)
         return value;
     }
 }
-double PhysicalNumber::Gto(Unit type, double value)
+double PhysicalNumber::Gto(Unit type, double value) const
 {
     switch (type)
     {
@@ -176,4 +198,41 @@ double PhysicalNumber::Gto(Unit type, double value)
     default:
         return value;
     }
+}
+
+void PhysicalNumber::normalize(double &a, double &b, const PhysicalNumber &other)
+{
+    switch (unit / 3)
+    {
+    case 0:
+        b = toCM(other.unit, other.value);
+        a = toCM(unit, value);
+        break;
+    case 1:
+        b = toSec(other.unit, other.value);
+        a = toSec(unit, value);
+        break;
+    case 2:
+        b = toG(other.unit, other.value);
+        a = toG(unit, value);
+        break;
+    }
+}
+
+int PhysicalNumber::addSubstruct(const PhysicalNumber &b)
+{
+    double newValue;
+    switch (unit / 3)
+    {
+    case 0:
+        newValue = CMto(unit, toCM(b.unit, b.value));
+        break;
+    case 1:
+        newValue = secTo(unit, toSec(b.unit, b.value));
+        break;
+    case 2:
+        newValue = Gto(unit, toG(b.unit, b.value));
+        break;
+    }
+    return newValue;
 }
