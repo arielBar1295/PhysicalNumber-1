@@ -26,6 +26,8 @@ int main() {
     
     PhysicalNumber Gram(30, Unit::G);
     PhysicalNumber Cm(30, Unit::CM);
+    PhysicalNumber KM(30, Unit::KM);
+
 
     testcase
     .setname("Basic output")
@@ -64,6 +66,12 @@ int main() {
       .CHECK_THROWS(Gram-=Cm)
       .CHECK_THROWS(Cm-Gram)
       .CHECK_THROWS(Gram-Cm)
+      .CHECK_THROWS(Cm < Gram)
+      .CHECK_THROWS(Gram > KM)
+      .CHECK_THROWS(Gram >= KM)
+      .CHECK_THROWS(Cm <= Gram)
+      .CHECK_THROWS(KM <= Gram)
+
 
       .setname("Should work")
       .CHECK_OUTPUT(++Gram, "31[g]")
@@ -76,6 +84,12 @@ int main() {
       .CHECK_OK(+Gram)
       .CHECK_OUTPUT(Gram-Gram,"0[g]")
       .CHECK_OUTPUT(Cm-Cm,"0[cm]")
+
+      .CHECK_EQUAL(Cm < KM, true)
+      .CHECK_EQUAL(Cm > KM, false)
+      .CHECK_EQUAL(Cm != KM, true)
+      .CHECK_EQUAL(Cm == KM, false)
+
 
 
       .print(cout, /*show_grade=*/false);

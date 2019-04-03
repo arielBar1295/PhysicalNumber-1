@@ -2,12 +2,11 @@
 
 using namespace ariel;
 
-PhysicalNumber::PhysicalNumber(double value, Unit unit) 
+PhysicalNumber::PhysicalNumber(double value, Unit unit)
 {
     this->value = value;
     this->unit = unit;
     name = getEnumName(unit);
-    
 }
 
 PhysicalNumber PhysicalNumber::operator+(const PhysicalNumber &b)
@@ -18,16 +17,15 @@ PhysicalNumber PhysicalNumber::operator+(const PhysicalNumber &b)
     double newValue;
     switch (unit / 3)
     {
-    case 0 :
+    case 0:
         newValue = CMto(unit, toCM(b.unit, b.value)) + value;
         break;
-    case 1 :
+    case 1:
         newValue = secTo(unit, toSec(b.unit, b.value)) + value;
         break;
-        case 2 :
+    case 2:
         newValue = Gto(unit, toG(b.unit, b.value)) + value;
         break;
-
     }
 
     PhysicalNumber a(newValue, unit);
@@ -46,7 +44,7 @@ PhysicalNumber PhysicalNumber::operator-(const PhysicalNumber &b)
 {
     return *this;
 }
-PhysicalNumber& PhysicalNumber::operator-=(const PhysicalNumber &b)
+PhysicalNumber &PhysicalNumber::operator-=(const PhysicalNumber &b)
 {
     return *this;
 }
@@ -55,15 +53,36 @@ PhysicalNumber PhysicalNumber::operator-()
     return *this;
 }
 
-bool PhysicalNumber::operator>=(const PhysicalNumber &b) {return true;}
-bool PhysicalNumber::operator>(const PhysicalNumber &b) {return true;}
-bool PhysicalNumber::operator<=(const PhysicalNumber &b) {return true;}
-bool PhysicalNumber::operator<(const PhysicalNumber &b) {return true;}
-bool PhysicalNumber::operator!=(const PhysicalNumber &b) {return true;}
-bool PhysicalNumber::operator==(const PhysicalNumber &b) {return true;}
+bool PhysicalNumber::operator>=(const PhysicalNumber &b) { return true; }
+bool PhysicalNumber::operator>(const PhysicalNumber &b)
+{
+    if (!sameUnits(b))
+        throw std::runtime_error("Not same units!");
+    double aValue;
+    double myValue;
+    switch (unit / 3)
+    {
+    case 0:
+        aValue = toCM(b.unit, b.value);
+        myValue = toCM(unit,value);
+        break;
+    case 1:
+        aValue = toSec(b.unit, b.value);
+        myValue = toSec(unit,value);        break;
+    case 2:
+        aValue = toG(b.unit, b.value);
+        myValue = toG(unit,value);        break;
+    }
+    
 
-PhysicalNumber& PhysicalNumber::operator++() {return *this;}
-PhysicalNumber& PhysicalNumber::operator--() {return *this;}
+}
+bool PhysicalNumber::operator<=(const PhysicalNumber &b) { return true; }
+bool PhysicalNumber::operator<(const PhysicalNumber &b) { return true; }
+bool PhysicalNumber::operator!=(const PhysicalNumber &b) { return true; }
+bool PhysicalNumber::operator==(const PhysicalNumber &b) { return true; }
+
+PhysicalNumber &PhysicalNumber::operator++() { return *this; }
+PhysicalNumber &PhysicalNumber::operator--() { return *this; }
 
 // istream& operator>>(istream &os, const PhysicalNumber &a) {}
 
@@ -158,5 +177,3 @@ double PhysicalNumber::Gto(Unit type, double value)
         return value;
     }
 }
-
-
