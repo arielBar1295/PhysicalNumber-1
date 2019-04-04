@@ -124,6 +124,28 @@ int main() {
       .CHECK_OUTPUT((--Gram) , "1999[g]")
       .CHECK_EQUAL(Gram != a, true)
       .CHECK_EQUAL(Gram == a, false)
+      .CHECK_OK(istringstream("200[g]") >> Gram)
+      .CHECK_OK(istringstream("0.2[kg]") >> a)
+      .CHECK_OUTPUT(Gram , "200[g]")
+      .CHECK_OUTPUT(a , "0.2[kg]")
+      .CHECK_EQUAL(Gram != a, false)
+      .CHECK_EQUAL(Gram == a, true)
+
+      .CHECK_OK(istringstream("30[min]") >> b)
+      .CHECK_OK(istringstream("0.5[hour]") >> c)
+      .CHECK_OUTPUT(b , "30[min]")
+      .CHECK_OUTPUT(c , "0.5[hour]")
+
+      .CHECK_EQUAL(b != c, false)
+      .CHECK_EQUAL(b == c, true)
+
+      .CHECK_OK(istringstream("0.5[km]") >> b)
+      .CHECK_OK(istringstream("500[m]") >> c)
+      .CHECK_OUTPUT(b , "0.5[km]")
+      .CHECK_OUTPUT(c , "500[m]")
+
+      .CHECK_EQUAL(b != c, false)
+      .CHECK_EQUAL(b == c, true)
 
 
 

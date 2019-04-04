@@ -240,9 +240,20 @@ std::istream& ariel::operator>>(istream &is, PhysicalNumber& a)
     is >> s;
     int n = s.find("[");
     double val;
+    bool dot = false;
+    int exp = 10;
     for (int i = 0; i < n; i++)
     {
-        val = val * 10 + (s[i] - '0');
+        double temp = s[i]-'0';
+        if(s[i]=='.') dot = true;
+    
+        else if(!dot) 
+        val = val * 10 + temp;
+        else  {
+        val = val + temp/exp;
+        exp*=10;
+        }
+
     }
     int n2 = s.find("]");
 
