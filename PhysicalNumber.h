@@ -36,12 +36,8 @@ public:
   PhysicalNumber& operator++();
   PhysicalNumber& operator--();
 
-  friend istream& operator>>(istream &is,  PhysicalNumber& a);
+  friend istream& operator>>(istream& is,  PhysicalNumber& a);
   friend ostream& operator<<(ostream& os, const PhysicalNumber& a);
-
-  Unit getUnit() { return unit; }
-  double getValue() const { return value; }
-  string getName() const { return name; }
 
 
 private:
@@ -54,12 +50,6 @@ private:
   double Gto(Unit type, double value) const;
   double addSubstruct(const PhysicalNumber &b);
   void normalize(double& a, double& b,const PhysicalNumber& other);
-
-
-  string getEnumName(int i)
-  {
-    return names[i];
-  }
 
 };
 

@@ -27,6 +27,7 @@ int main() {
     PhysicalNumber Gram(30, Unit::G);
     PhysicalNumber Cm(30, Unit::CM);
     PhysicalNumber KM(30, Unit::KM);
+    PhysicalNumber MET(200, Unit::M);
 
 
     testcase
@@ -71,6 +72,16 @@ int main() {
       .CHECK_THROWS(Gram >= KM)
       .CHECK_THROWS(Cm <= Gram)
       .CHECK_THROWS(KM <= Gram)
+      .CHECK_THROWS(a <= b)
+      .CHECK_THROWS(b <= c)
+      .CHECK_THROWS(b += Gram)
+      .CHECK_THROWS(a -= d)
+      .CHECK_THROWS(c += MET)
+      .CHECK_THROWS(c -= MET)
+      .CHECK_THROWS(MET -= c)
+      .CHECK_THROWS(MET += c)
+      .CHECK_THROWS(Gram < KM)
+
 
 
       .setname("Should work")
@@ -83,12 +94,36 @@ int main() {
       .CHECK_OUTPUT((-Gram),"-60[g]")
       .CHECK_OK(+Gram)
       .CHECK_OUTPUT(Gram-Gram,"0[g]")
-      .CHECK_OUTPUT(Cm-Cm,"0[cm]")
+      .CHECK_OUTPUT((KM+=MET) , "30.2[km]")
+      .CHECK_OUTPUT((Cm-=Cm),"0[cm]")
+      .CHECK_OUTPUT(Cm,"0[cm]")
+      .CHECK_OUTPUT((Cm+=MET),"20000[cm]")
+      .CHECK_OUTPUT((MET+=Cm) , "400[m]")
+      .CHECK_OUTPUT((++MET) , "401[m]")
+      .CHECK_OUTPUT((--MET) , "400[m]")
+      .CHECK_OUTPUT((-MET) , "-400[m]")
+      .CHECK_OUTPUT((+MET) , "400[m]")
 
       .CHECK_EQUAL(Cm < KM, true)
       .CHECK_EQUAL(Cm > KM, false)
       .CHECK_EQUAL(Cm != KM, true)
       .CHECK_EQUAL(Cm == KM, false)
+      .CHECK_EQUAL(Cm == Cm, true)
+      .CHECK_EQUAL(MET > Cm, true)
+      .CHECK_EQUAL(MET != Cm, true)
+      .CHECK_EQUAL(MET > Cm, true)
+      .CHECK_EQUAL(MET >= Cm, true)
+      .CHECK_OK(istringstream("200[m]") >> MET)
+      .CHECK_OUTPUT(MET, "200[m]")
+      .CHECK_EQUAL(MET == Cm, true)
+      .CHECK_OK(istringstream("2000[g]") >> Gram)
+      .CHECK_OK(istringstream("2[kg]") >> a)
+      .CHECK_OUTPUT(a, "2[kg]")
+      .CHECK_EQUAL(Gram == a, true)
+      .CHECK_EQUAL(Gram != a, false)
+      .CHECK_OUTPUT((--Gram) , "1999[g]")
+      .CHECK_EQUAL(Gram != a, true)
+      .CHECK_EQUAL(Gram == a, false)
 
 
 

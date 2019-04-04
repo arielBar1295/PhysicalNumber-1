@@ -6,7 +6,7 @@ PhysicalNumber::PhysicalNumber(double value, Unit unit)
 {
     this->value = value;
     this->unit = unit;
-    name = getEnumName(unit);
+    name = names[unit];
 }
 
 PhysicalNumber PhysicalNumber::operator+(const PhysicalNumber &b)
@@ -19,7 +19,7 @@ PhysicalNumber PhysicalNumber::operator+(const PhysicalNumber &b)
     return result;
 }
 
-PhysicalNumber &PhysicalNumber::operator+=(const PhysicalNumber &b)
+PhysicalNumber& PhysicalNumber::operator+=(const PhysicalNumber &b)
 {
     PhysicalNumber temp = (*this + b);
     value = temp.value;
@@ -40,7 +40,7 @@ PhysicalNumber PhysicalNumber::operator-(const PhysicalNumber &b)
     PhysicalNumber result(newValue, unit);
     return result;
 }
-PhysicalNumber &PhysicalNumber::operator-=(const PhysicalNumber &b)
+PhysicalNumber& PhysicalNumber::operator-=(const PhysicalNumber &b)
 {
     PhysicalNumber temp = (*this - b);
     value = temp.value;
@@ -94,12 +94,12 @@ bool PhysicalNumber::operator==(const PhysicalNumber &b)
     return !(*this < b) && !(*this > b);
 }
 
-PhysicalNumber &PhysicalNumber::operator++()
+PhysicalNumber& PhysicalNumber::operator++()
 {
     value++;
     return *this;
 }
-PhysicalNumber &PhysicalNumber::operator--()
+PhysicalNumber& PhysicalNumber::operator--()
 {
     value--;
     return *this;
@@ -109,7 +109,7 @@ bool PhysicalNumber::sameUnits(const PhysicalNumber &b) const
 {
     int bgroupUnit = b.unit / 3;
     int agroupUnit = unit / 3;
-
+    
     if (bgroupUnit == agroupUnit)
         return true;
     return false;
@@ -229,17 +229,17 @@ double PhysicalNumber::addSubstruct(const PhysicalNumber &b)
     return newValue;
 }
 
-std::ostream &ariel::operator<<(ostream &os, const PhysicalNumber &a)
+std::ostream& ariel::operator<<(ostream &os, const PhysicalNumber& a)
 {
-    os << a.getValue() << "[" << a.getName() << "]";
+    os << a.value << "[" << a.name << "]";
     return os;
 }
-std::istream &ariel::operator>>(istream &is, PhysicalNumber &a)
+std::istream& ariel::operator>>(istream &is, PhysicalNumber& a)
 {
     string s;
     is >> s;
     int n = s.find("[");
-    double val = 0;
+    double val;
     for (int i = 0; i < n; i++)
     {
         val = val * 10 + (s[i] - '0');
@@ -261,5 +261,4 @@ std::istream &ariel::operator>>(istream &is, PhysicalNumber &a)
         a.value = val;
         a.unit = un; 
         return is;
-    
 }
