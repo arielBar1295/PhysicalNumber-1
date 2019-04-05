@@ -49,7 +49,7 @@ PhysicalNumber &PhysicalNumber::operator-=(const PhysicalNumber &b)
 }
 PhysicalNumber PhysicalNumber::operator-() const
 {
-    return PhysicalNumber((this->value) * -1, this->unit);
+    return PhysicalNumber(value* -1, unit);
 }
 
 bool PhysicalNumber::operator>=(const PhysicalNumber &b) const
@@ -118,10 +118,10 @@ double PhysicalNumber::secTo(Unit type, double value) const
 {
     switch (type)
     {
-    case 4:
+    case MIN:
         return value / 60;
 
-    case 5:
+    case HOUR:
         return value / 3600;
     default:
         return value;
@@ -132,9 +132,9 @@ double PhysicalNumber::toSec(Unit type, double value) const
 {
     switch (type)
     {
-    case 4:
+    case MIN:
         return value * 60;
-    case 5:
+    case HOUR:
         return value * 3600;
     default:
         return value;
@@ -145,9 +145,9 @@ double PhysicalNumber::toCM(Unit type, double value) const
 {
     switch (type)
     {
-    case 1:
+    case M:
         return value * 100;
-    case 2:
+    case KM:
         return value * 100000;
     default:
         return value;
@@ -157,9 +157,9 @@ double PhysicalNumber::CMto(Unit type, double value) const
 {
     switch (type)
     {
-    case 1:
+    case M:
         return value / 100;
-    case 2:
+    case KM:
         return value / 100000;
     default:
         return value;
@@ -170,9 +170,9 @@ double PhysicalNumber::toG(Unit type, double value) const
 {
     switch (type)
     {
-    case 7:
+    case KG:
         return value * 1000;
-    case 8:
+    case TON:
         return value * 1000000;
     default:
         return value;
@@ -182,9 +182,9 @@ double PhysicalNumber::Gto(Unit type, double value) const
 {
     switch (type)
     {
-    case 7:
+    case KG:
         return value / 1000;
-    case 8:
+    case TON:
         return value / 1000000;
     default:
         return value;
@@ -228,8 +228,8 @@ double PhysicalNumber::addSubstruct(const PhysicalNumber &b)
     return newValue;
 }
 
-void PhysicalNumber::error(Unit type) const {
-    throw std::runtime_error("Units do not match - ["+names[type]+"] cannot be converted to ["+ names[unit]+"]");
+void PhysicalNumber::error(Unit other) const {
+    throw std::runtime_error("Units do not match - ["+names[other]+"] cannot be converted to ["+ names[unit]+"]");
 }
 
 std::ostream &ariel::operator<<(ostream &os, const PhysicalNumber &a)
