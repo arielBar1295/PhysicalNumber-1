@@ -14,10 +14,10 @@ class PhysicalNumber
 private:
   double value;
   Unit unit;
-  string name;
 
 public:
   PhysicalNumber(double value, Unit unit);
+  PhysicalNumber(const PhysicalNumber &other);
 
   PhysicalNumber operator+(const PhysicalNumber& b);
   PhysicalNumber& operator+=(const PhysicalNumber& b);
@@ -34,7 +34,9 @@ public:
   bool operator==(const PhysicalNumber& b) const;
 
   PhysicalNumber& operator++();
+  PhysicalNumber& operator++(int);
   PhysicalNumber& operator--();
+  PhysicalNumber& operator--(int);
 
   friend istream& operator>>(istream& is, PhysicalNumber& a);
   friend ostream& operator<<(ostream& os, const PhysicalNumber& a);

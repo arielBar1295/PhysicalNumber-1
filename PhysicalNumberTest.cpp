@@ -107,6 +107,12 @@ int main() {
       .CHECK_OUTPUT((--MET) , "400[m]")
       .CHECK_OUTPUT((-MET) , "-400[m]")
       .CHECK_OUTPUT((+MET) , "400[m]")
+      .CHECK_OUTPUT(Gram++, "60[g]")
+      .CHECK_OUTPUT(Gram, "61[g]")
+      .CHECK_OUTPUT(Gram--, "61[g]")
+      .CHECK_OUTPUT(Gram, "60[g]")
+
+
 
       .CHECK_EQUAL(Cm < KM, true)
       .CHECK_EQUAL(Cm > KM, false)

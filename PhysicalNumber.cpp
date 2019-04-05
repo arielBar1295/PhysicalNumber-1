@@ -6,8 +6,10 @@ PhysicalNumber::PhysicalNumber(double value, Unit unit)
 {
     this->value = value;
     this->unit = unit;
-    name = names[unit];
 }
+
+PhysicalNumber::PhysicalNumber(const PhysicalNumber &other) : PhysicalNumber(other.value, other.unit) {}
+
 
 PhysicalNumber PhysicalNumber::operator+(const PhysicalNumber &b)
 {
@@ -26,10 +28,7 @@ PhysicalNumber &PhysicalNumber::operator+=(const PhysicalNumber &b)
     return *this;
 }
 
-PhysicalNumber PhysicalNumber::operator+() const
-{
-    return *this;
-}
+PhysicalNumber PhysicalNumber::operator+() const {return *this; }
 
 PhysicalNumber PhysicalNumber::operator-(const PhysicalNumber &b)
 {
@@ -47,10 +46,7 @@ PhysicalNumber &PhysicalNumber::operator-=(const PhysicalNumber &b)
 
     return *this;
 }
-PhysicalNumber PhysicalNumber::operator-() const
-{
-    return PhysicalNumber(value* -1, unit);
-}
+PhysicalNumber PhysicalNumber::operator-() const { return PhysicalNumber(value* -1, unit); }
 
 bool PhysicalNumber::operator>=(const PhysicalNumber &b) const
 {
@@ -64,10 +60,8 @@ bool PhysicalNumber::operator>=(const PhysicalNumber &b) const
     return myValue >= aValue;
 }
 
-bool PhysicalNumber::operator>(const PhysicalNumber &b) const
-{
-    return !(*this <= b);
-}
+bool PhysicalNumber::operator>(const PhysicalNumber &b) const{ return !(*this <= b); }
+
 bool PhysicalNumber::operator<=(const PhysicalNumber &b) const
 {
     if (!sameUnits(b))
@@ -79,33 +73,32 @@ bool PhysicalNumber::operator<=(const PhysicalNumber &b) const
 
     return myValue <= aValue;
 }
-bool PhysicalNumber::operator<(const PhysicalNumber &b) const
-{
-    return !(*this >= b);
-}
-bool PhysicalNumber::operator!=(const PhysicalNumber &b) const
-{
-    return (*this > b) || (*this < b);
-}
-bool PhysicalNumber::operator==(const PhysicalNumber &b) const
-{
+bool PhysicalNumber::operator<(const PhysicalNumber &b) const{return !(*this >= b);}
+bool PhysicalNumber::operator!=(const PhysicalNumber &b) const{return (*this > b) || (*this < b);}
+bool PhysicalNumber::operator==(const PhysicalNumber &b) const{return !(*this < b) && !(*this > b);}
 
-    return !(*this < b) && !(*this > b);
-}
-
-PhysicalNumber &PhysicalNumber::operator++()
-{
+PhysicalNumber &PhysicalNumber::operator++(){
     value++;
     return *this;
 }
-PhysicalNumber &PhysicalNumber::operator--()
-{
+
+PhysicalNumber &PhysicalNumber::operator++(int){
+    PhysicalNumber temp(*this);
+    value++;
+    return temp;
+}
+
+PhysicalNumber &PhysicalNumber::operator--(){
     value--;
     return *this;
 }
+PhysicalNumber &PhysicalNumber::operator--(int){
+    PhysicalNumber temp(*this);
+    value--;
+    return temp;
+}
 
-bool PhysicalNumber::sameUnits(const PhysicalNumber &b) const
-{
+bool PhysicalNumber::sameUnits(const PhysicalNumber &b) const{
     int bgroupUnit = b.unit / 3;
     int agroupUnit = unit / 3;
 
@@ -114,8 +107,7 @@ bool PhysicalNumber::sameUnits(const PhysicalNumber &b) const
     return false;
 }
 
-double PhysicalNumber::secTo(Unit type, double value) const
-{
+double PhysicalNumber::secTo(Unit type, double value) const{
     switch (type)
     {
     case MIN:
@@ -128,8 +120,7 @@ double PhysicalNumber::secTo(Unit type, double value) const
     }
 }
 
-double PhysicalNumber::toSec(Unit type, double value) const
-{
+double PhysicalNumber::toSec(Unit type, double value) const{
     switch (type)
     {
     case MIN:
@@ -234,7 +225,7 @@ void PhysicalNumber::error(Unit other) const {
 
 std::ostream &ariel::operator<<(ostream &os, const PhysicalNumber &a)
 {
-    os << a.value << "[" << a.name << "]";
+    os << a.value << "[" << names[a.unit] << "]";
     return os;
 }
 
@@ -258,11 +249,8 @@ std::istream &ariel::operator>>(istream &is, PhysicalNumber &a)
     {
         if (checkName.compare(names[i]) == 0)
         {
-            un = static_cast<Unit>(i);
-            a.name = names[i];
+            a.unit = static_cast<Unit>(i);
             a.value = val;
-            a.unit = un;
-
             found = true;
         }
     }
