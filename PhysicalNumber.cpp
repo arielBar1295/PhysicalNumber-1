@@ -15,32 +15,32 @@ PhysicalNumber PhysicalNumber::operator+(const PhysicalNumber &b)
         throw std::runtime_error("Not same units!");
 
     double newValue = value + addSubstruct(b);
-    PhysicalNumber result(newValue, unit);
-    return result;
+    return PhysicalNumber(newValue, unit);
 }
 
-PhysicalNumber& PhysicalNumber::operator+=(const PhysicalNumber &b)
+PhysicalNumber &PhysicalNumber::operator+=(const PhysicalNumber &b)
 {
     PhysicalNumber temp = (*this + b);
     value = temp.value;
 
     return *this;
 }
+
 PhysicalNumber PhysicalNumber::operator+() const
 {
     return *this;
 }
+
 PhysicalNumber PhysicalNumber::operator-(const PhysicalNumber &b)
 {
     if (!sameUnits(b))
         throw std::runtime_error("Not same units!");
 
     double newValue = value - addSubstruct(b);
-
-    PhysicalNumber result(newValue, unit);
-    return result;
+    return  PhysicalNumber(newValue, unit);
 }
-PhysicalNumber& PhysicalNumber::operator-=(const PhysicalNumber &b)
+
+PhysicalNumber &PhysicalNumber::operator-=(const PhysicalNumber &b)
 {
     PhysicalNumber temp = (*this - b);
     value = temp.value;
@@ -49,11 +49,10 @@ PhysicalNumber& PhysicalNumber::operator-=(const PhysicalNumber &b)
 }
 PhysicalNumber PhysicalNumber::operator-()
 {
-    PhysicalNumber result((this->value) * -1, this->unit);
-    return result;
+    return PhysicalNumber((this->value) * -1, this->unit);
 }
 
-bool PhysicalNumber::operator>=(const PhysicalNumber &b)
+bool PhysicalNumber::operator>=(const PhysicalNumber &b) const
 {
     if (!sameUnits(b))
         throw std::runtime_error("Not same units!");
@@ -65,11 +64,11 @@ bool PhysicalNumber::operator>=(const PhysicalNumber &b)
     return myValue >= aValue;
 }
 
-bool PhysicalNumber::operator>(const PhysicalNumber &b)
+bool PhysicalNumber::operator>(const PhysicalNumber &b) const
 {
     return !(*this <= b);
 }
-bool PhysicalNumber::operator<=(const PhysicalNumber &b)
+bool PhysicalNumber::operator<=(const PhysicalNumber &b) const
 {
     if (!sameUnits(b))
         throw std::runtime_error("Not same units!");
@@ -80,15 +79,15 @@ bool PhysicalNumber::operator<=(const PhysicalNumber &b)
 
     return myValue <= aValue;
 }
-bool PhysicalNumber::operator<(const PhysicalNumber &b)
+bool PhysicalNumber::operator<(const PhysicalNumber &b) const
 {
     return !(*this >= b);
 }
-bool PhysicalNumber::operator!=(const PhysicalNumber &b)
+bool PhysicalNumber::operator!=(const PhysicalNumber &b) const
 {
     return (*this > b) || (*this < b);
 }
-bool PhysicalNumber::operator==(const PhysicalNumber &b)
+bool PhysicalNumber::operator==(const PhysicalNumber &b) const
 {
 
     return !(*this < b) && !(*this > b);
@@ -109,7 +108,7 @@ bool PhysicalNumber::sameUnits(const PhysicalNumber &b) const
 {
     int bgroupUnit = b.unit / 3;
     int agroupUnit = unit / 3;
-    
+
     if (bgroupUnit == agroupUnit)
         return true;
     return false;
@@ -192,7 +191,7 @@ double PhysicalNumber::Gto(Unit type, double value) const
     }
 }
 
-void PhysicalNumber::normalize(double &a, double &b, const PhysicalNumber &other)
+void PhysicalNumber::normalize(double &a, double &b, const PhysicalNumber &other) const
 {
     switch (unit / 3)
     {
@@ -229,47 +228,54 @@ double PhysicalNumber::addSubstruct(const PhysicalNumber &b)
     return newValue;
 }
 
-std::ostream& ariel::operator<<(ostream &os, const PhysicalNumber& a)
+std::ostream &ariel::operator<<(ostream &os, const PhysicalNumber &a)
 {
     os << a.value << "[" << a.name << "]";
     return os;
 }
-std::istream& ariel::operator>>(istream &is, PhysicalNumber& a)
+
+std::istream &ariel::operator>>(istream &is, PhysicalNumber &a)
 {
-    string s;
-    is >> s;
-    int n = s.find("[");
     double val;
-    bool dot = false;
-    int exp = 10;
-    for (int i = 0; i < n; i++)
-    {
-        double temp = s[i]-'0';
-        if(s[i]=='.') dot = true;
-    
-        else if(!dot) 
-        val = val * 10 + temp;
-        else  {
-        val = val + temp/exp;
-        exp*=10;
-        }
+    char check;
+    string s;
+    if (!(is >> val) || !a.checkChar(is, '[') || !(is >> s))
+        throw std::runtime_error("String type not acceptable!");
 
-    }
-    int n2 = s.find("]");
+    int n = s.find(']');
+    if (n == -1)
+        throw std::runtime_error("String type not acceptable!");
 
-    string s2 = s.substr(n + 1, n2 - n - 1);
+    string checkName = s.substr(0, n);
+
     Unit un;
     bool found = false;
     for (int i = 0; i < size && !found; i++)
     {
-        if (s2.compare(names[i]) == 0 )
+        if (checkName.compare(names[i]) == 0)
         {
             un = static_cast<Unit>(i);
             a.name = names[i];
+            a.value = val;
+            a.unit = un;
+
             found = true;
         }
     }
-        a.value = val;
-        a.unit = un; 
+    if (!found)
+        throw std::runtime_error("String type not acceptable!");
+
+    return is;
+}
+
+istream &PhysicalNumber::checkChar(istream &is, char expected)
+{
+    char acutal;
+    if (!(is >> acutal))
         return is;
+
+    if (acutal != expected)
+        is.setstate(ios::failbit);
+
+    return is;
 }

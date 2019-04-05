@@ -146,6 +146,15 @@ int main() {
 
       .CHECK_EQUAL(b != c, false)
       .CHECK_EQUAL(b == c, true)
+      .CHECK_OUTPUT((b+b+c), "1.5[km]")
+      .CHECK_OUTPUT((c+b+b), "1500[m]")
+      .CHECK_OUTPUT((c+b-b), "500[m]")
+      .CHECK_OUTPUT((b-c-c+b), "0[km]")
+      .CHECK_EQUAL((b+c > b), true)
+      .CHECK_EQUAL((b-c < b), true)
+      .CHECK_OUTPUT((b+=c+=b), "1.5[km]")
+      .CHECK_OUTPUT(b, "1.5[km]")
+      .CHECK_OUTPUT(c, "1000[m]")
 
 
 

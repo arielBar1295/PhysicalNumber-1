@@ -19,19 +19,19 @@ private:
 public:
   PhysicalNumber(double value, Unit unit);
 
-  PhysicalNumber operator+(const PhysicalNumber &b);
-  PhysicalNumber& operator+=(const PhysicalNumber &b);
+  PhysicalNumber operator+(const PhysicalNumber& b);
+  PhysicalNumber& operator+=(const PhysicalNumber& b);
   PhysicalNumber operator+() const;
-  PhysicalNumber operator-(const PhysicalNumber &b);
-  PhysicalNumber& operator-=(const PhysicalNumber &b);
+  PhysicalNumber operator-(const PhysicalNumber& b);
+  PhysicalNumber& operator-=(const PhysicalNumber& b);
   PhysicalNumber operator-();
 
-  bool operator>=(const PhysicalNumber &b);
-  bool operator>(const PhysicalNumber &b);
-  bool operator<=(const PhysicalNumber &b);
-  bool operator<(const PhysicalNumber &b);
-  bool operator!=(const PhysicalNumber &b);
-  bool operator==(const PhysicalNumber &b);
+  bool operator>=(const PhysicalNumber& b) const;
+  bool operator>(const PhysicalNumber& b) const;
+  bool operator<=(const PhysicalNumber& b) const;
+  bool operator<(const PhysicalNumber& b) const;
+  bool operator!=(const PhysicalNumber& b) const;
+  bool operator==(const PhysicalNumber& b) const;
 
   PhysicalNumber& operator++();
   PhysicalNumber& operator--();
@@ -49,7 +49,8 @@ private:
   double toG(Unit type, double value) const;
   double Gto(Unit type, double value) const;
   double addSubstruct(const PhysicalNumber &b);
-  void normalize(double& a, double& b,const PhysicalNumber& other);
+  void normalize(double& a, double& b,const PhysicalNumber& other) const;
+  istream& checkChar(istream& is, char check);
 
 };
 
