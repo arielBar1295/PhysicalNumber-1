@@ -140,6 +140,11 @@ int main() {
       .CHECK_OUTPUT(b , "30[min]")
       .CHECK_OUTPUT(c , "0.5[hour]")
 
+      .CHECK_OK(istringstream("1[ton]") >> b)
+      .CHECK_OK(istringstream("1000[kg]") >> c)
+      .CHECK_OUTPUT(b , "1[ton]")
+      .CHECK_OUTPUT(c , "1000[kg]")
+
       .CHECK_EQUAL(b != c, false)
       .CHECK_EQUAL(b == c, true)
 

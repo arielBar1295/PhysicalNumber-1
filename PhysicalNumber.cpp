@@ -47,7 +47,7 @@ PhysicalNumber &PhysicalNumber::operator-=(const PhysicalNumber &b)
 
     return *this;
 }
-PhysicalNumber PhysicalNumber::operator-()
+PhysicalNumber PhysicalNumber::operator-() const
 {
     return PhysicalNumber((this->value) * -1, this->unit);
 }
@@ -268,7 +268,7 @@ std::istream &ariel::operator>>(istream &is, PhysicalNumber &a)
     return is;
 }
 
-istream &PhysicalNumber::checkChar(istream &is, char expected)
+istream &PhysicalNumber::checkChar(istream &is, char expected) const
 {
     char acutal;
     if (!(is >> acutal))

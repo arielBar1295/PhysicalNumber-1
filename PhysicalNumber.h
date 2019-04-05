@@ -1,7 +1,7 @@
 #include <iostream>
 #include "Unit.h"
 #include <string>
-#define size 8
+#define size 9
 
 using namespace std;
 
@@ -24,7 +24,7 @@ public:
   PhysicalNumber operator+() const;
   PhysicalNumber operator-(const PhysicalNumber& b);
   PhysicalNumber& operator-=(const PhysicalNumber& b);
-  PhysicalNumber operator-();
+  PhysicalNumber operator-() const;
 
   bool operator>=(const PhysicalNumber& b) const;
   bool operator>(const PhysicalNumber& b) const;
@@ -36,7 +36,7 @@ public:
   PhysicalNumber& operator++();
   PhysicalNumber& operator--();
 
-  friend istream& operator>>(istream& is,  PhysicalNumber& a);
+  friend istream& operator>>(istream& is, PhysicalNumber& a);
   friend ostream& operator<<(ostream& os, const PhysicalNumber& a);
 
 
@@ -50,7 +50,7 @@ private:
   double Gto(Unit type, double value) const;
   double addSubstruct(const PhysicalNumber &b);
   void normalize(double& a, double& b,const PhysicalNumber& other) const;
-  istream& checkChar(istream& is, char check);
+  istream& checkChar(istream& is, char check) const;
 
 };
 
