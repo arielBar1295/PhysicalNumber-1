@@ -81,6 +81,10 @@ int main() {
       .CHECK_THROWS(MET -= c)
       .CHECK_THROWS(MET += c)
       .CHECK_THROWS(Gram < KM)
+      .CHECK_THROWS(istringstream("200[g") >> Gram)
+      .CHECK_THROWS(istringstream("0.2[]") >> a)
+      .CHECK_THROWS(istringstream("200g]") >> Gram)
+      .CHECK_THROWS(istringstream("0.2[kgg]") >> a)
 
 
 
