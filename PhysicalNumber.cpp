@@ -12,7 +12,7 @@ PhysicalNumber::PhysicalNumber(double value, Unit unit)
 PhysicalNumber PhysicalNumber::operator+(const PhysicalNumber &b)
 {
     if (!sameUnits(b))
-        throw std::runtime_error("Not same units!");
+        error(b.unit);
 
     double newValue = value + addSubstruct(b);
     return PhysicalNumber(newValue, unit);
@@ -34,10 +34,10 @@ PhysicalNumber PhysicalNumber::operator+() const
 PhysicalNumber PhysicalNumber::operator-(const PhysicalNumber &b)
 {
     if (!sameUnits(b))
-        throw std::runtime_error("Not same units!");
+        error(b.unit);
 
     double newValue = value - addSubstruct(b);
-    return  PhysicalNumber(newValue, unit);
+    return PhysicalNumber(newValue, unit);
 }
 
 PhysicalNumber &PhysicalNumber::operator-=(const PhysicalNumber &b)
@@ -55,7 +55,7 @@ PhysicalNumber PhysicalNumber::operator-() const
 bool PhysicalNumber::operator>=(const PhysicalNumber &b) const
 {
     if (!sameUnits(b))
-        throw std::runtime_error("Not same units!");
+        error(b.unit);
 
     double aValue;
     double myValue;
@@ -71,7 +71,7 @@ bool PhysicalNumber::operator>(const PhysicalNumber &b) const
 bool PhysicalNumber::operator<=(const PhysicalNumber &b) const
 {
     if (!sameUnits(b))
-        throw std::runtime_error("Not same units!");
+        error(b.unit);
 
     double aValue;
     double myValue;
@@ -93,12 +93,12 @@ bool PhysicalNumber::operator==(const PhysicalNumber &b) const
     return !(*this < b) && !(*this > b);
 }
 
-PhysicalNumber& PhysicalNumber::operator++()
+PhysicalNumber &PhysicalNumber::operator++()
 {
     value++;
     return *this;
 }
-PhysicalNumber& PhysicalNumber::operator--()
+PhysicalNumber &PhysicalNumber::operator--()
 {
     value--;
     return *this;
@@ -226,6 +226,10 @@ double PhysicalNumber::addSubstruct(const PhysicalNumber &b)
         break;
     }
     return newValue;
+}
+
+void PhysicalNumber::error(Unit type) const {
+    throw std::runtime_error("Units do not match - ["+names[type]+"] cannot be converted to ["+ names[unit]+"]");
 }
 
 std::ostream &ariel::operator<<(ostream &os, const PhysicalNumber &a)
