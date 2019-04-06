@@ -8,9 +8,10 @@ PhysicalNumber::PhysicalNumber(double value, Unit unit)
     this->unit = unit;
 }
 
+// Copy constructor
 PhysicalNumber::PhysicalNumber(const PhysicalNumber &other) : PhysicalNumber(other.value, other.unit) {}
 
-
+// A + B opertator
 PhysicalNumber PhysicalNumber::operator+(const PhysicalNumber &b)
 {
     if (!sameUnits(b))
@@ -20,6 +21,7 @@ PhysicalNumber PhysicalNumber::operator+(const PhysicalNumber &b)
     return PhysicalNumber(newValue, unit);
 }
 
+// A = A + B operator
 PhysicalNumber &PhysicalNumber::operator+=(const PhysicalNumber &b)
 {
     PhysicalNumber temp = (*this + b);
@@ -28,8 +30,10 @@ PhysicalNumber &PhysicalNumber::operator+=(const PhysicalNumber &b)
     return *this;
 }
 
+// +A
 PhysicalNumber PhysicalNumber::operator+() const {return *this; }
 
+// -A
 PhysicalNumber PhysicalNumber::operator-(const PhysicalNumber &b)
 {
     if (!sameUnits(b))
@@ -39,6 +43,7 @@ PhysicalNumber PhysicalNumber::operator-(const PhysicalNumber &b)
     return PhysicalNumber(newValue, unit);
 }
 
+// A = A - B
 PhysicalNumber &PhysicalNumber::operator-=(const PhysicalNumber &b)
 {
     PhysicalNumber temp = (*this - b);
@@ -46,8 +51,37 @@ PhysicalNumber &PhysicalNumber::operator-=(const PhysicalNumber &b)
 
     return *this;
 }
+
+// -A
 PhysicalNumber PhysicalNumber::operator-() const { return PhysicalNumber(value* -1, unit); }
 
+// ++A
+PhysicalNumber &PhysicalNumber::operator++(){
+    value++;
+    return *this;
+}
+
+// A++
+PhysicalNumber &PhysicalNumber::operator++(int){
+    PhysicalNumber temp(*this);
+    value++;
+    return temp;
+}
+
+// --A
+PhysicalNumber &PhysicalNumber::operator--(){
+    value--;
+    return *this;
+}
+
+// A--
+PhysicalNumber &PhysicalNumber::operator--(int){
+    PhysicalNumber temp(*this);
+    value--;
+    return temp;
+}
+
+/******************** Booleans operator ******************/
 bool PhysicalNumber::operator>=(const PhysicalNumber &b) const
 {
     if (!sameUnits(b))
@@ -77,28 +111,10 @@ bool PhysicalNumber::operator<(const PhysicalNumber &b) const{return !(*this >= 
 bool PhysicalNumber::operator!=(const PhysicalNumber &b) const{return (*this > b) || (*this < b);}
 bool PhysicalNumber::operator==(const PhysicalNumber &b) const{return !(*this < b) && !(*this > b);}
 
-PhysicalNumber &PhysicalNumber::operator++(){
-    value++;
-    return *this;
-}
+/******************** End Booleans operator ******************/
 
-PhysicalNumber &PhysicalNumber::operator++(int){
-    PhysicalNumber temp(*this);
-    value++;
-    return temp;
-}
-
-PhysicalNumber &PhysicalNumber::operator--(){
-    value--;
-    return *this;
-}
-PhysicalNumber &PhysicalNumber::operator--(int){
-    PhysicalNumber temp(*this);
-    value--;
-    return temp;
-}
-
-bool PhysicalNumber::sameUnits(const PhysicalNumber &b) const{
+// Return true iff objects are the same unit type
+bool PhysicalNumber::sameUnits(const PhysicalNumber &b) const {
     int bgroupUnit = b.unit / 3;
     int agroupUnit = unit / 3;
 
@@ -107,7 +123,8 @@ bool PhysicalNumber::sameUnits(const PhysicalNumber &b) const{
     return false;
 }
 
-double PhysicalNumber::secTo(Unit type, double value) const{
+// Convert Times from seconds to seconds, minutes or hours
+double PhysicalNumber::secTo(Unit type, double value) const {
     switch (type)
     {
     case MIN:
@@ -120,7 +137,8 @@ double PhysicalNumber::secTo(Unit type, double value) const{
     }
 }
 
-double PhysicalNumber::toSec(Unit type, double value) const{
+// Convert Times from seconds, minutes or hours to seconds
+double PhysicalNumber::toSec(Unit type, double value) const {
     switch (type)
     {
     case MIN:
@@ -132,6 +150,7 @@ double PhysicalNumber::toSec(Unit type, double value) const{
     }
 }
 
+// Convert Length from Km, Meter or Cm to Cm
 double PhysicalNumber::toCM(Unit type, double value) const
 {
     switch (type)
@@ -144,6 +163,7 @@ double PhysicalNumber::toCM(Unit type, double value) const
         return value;
     }
 }
+// Convert Length from Cm to Km, Meter or Cm
 double PhysicalNumber::CMto(Unit type, double value) const
 {
     switch (type)
@@ -157,6 +177,7 @@ double PhysicalNumber::CMto(Unit type, double value) const
     }
 }
 
+// Convert Weight from Ton, Kg, Gram to Gram
 double PhysicalNumber::toG(Unit type, double value) const
 {
     switch (type)
@@ -169,6 +190,8 @@ double PhysicalNumber::toG(Unit type, double value) const
         return value;
     }
 }
+
+// Convert Weight from Gram to Ton, Kg, Gram
 double PhysicalNumber::Gto(Unit type, double value) const
 {
     switch (type)
@@ -181,7 +204,7 @@ double PhysicalNumber::Gto(Unit type, double value) const
         return value;
     }
 }
-
+// Convert every types Lengths, Weight and Times respectively to Cm, Gram and seconds
 void PhysicalNumber::normalize(double &a, double &b, const PhysicalNumber &other) const
 {
     switch (unit / 3)
@@ -201,8 +224,8 @@ void PhysicalNumber::normalize(double &a, double &b, const PhysicalNumber &other
     }
 }
 
-double PhysicalNumber::addSubstruct(const PhysicalNumber &b)
-{
+//  Convert unit type b to a, return new value of the convertion
+double PhysicalNumber::addSubstruct(const PhysicalNumber &b) {
     double newValue;
     switch (unit / 3)
     {
@@ -219,16 +242,19 @@ double PhysicalNumber::addSubstruct(const PhysicalNumber &b)
     return newValue;
 }
 
+// print error in details
 void PhysicalNumber::error(Unit other) const {
-    throw std::runtime_error("Units do not match - ["+names[other]+"] cannot be converted to ["+ names[unit]+"]");
+    throw std::runtime_error("Units do not match - ["+names[other]+"] cannot be converted to ["+names[unit]+"]");
 }
 
+// output operator return repsent of the class
 std::ostream &ariel::operator<<(ostream &os, const PhysicalNumber &a)
 {
     os << a.value << "[" << names[a.unit] << "]";
     return os;
 }
 
+// input operator, check input and insert if it's fits PhysicalNumber format
 std::istream &ariel::operator>>(istream &is, PhysicalNumber &a)
 {
     double val;
@@ -245,7 +271,7 @@ std::istream &ariel::operator>>(istream &is, PhysicalNumber &a)
 
     Unit un;
     bool found = false;
-    for (int i = 0; i < size && !found; i++)
+    for (int i = 0; i < size && !found; i++) // Check if [name] fit the names of units
     {
         if (checkName.compare(names[i]) == 0)
         {
@@ -259,14 +285,14 @@ std::istream &ariel::operator>>(istream &is, PhysicalNumber &a)
 
     return is;
 }
-
+// Check if expected char is equal to input char from user
 istream &PhysicalNumber::checkChar(istream &is, char expected) const
 {
     char acutal;
     if (!(is >> acutal))
         return is;
 
-    if (acutal != expected)
+    if (acutal != expected)  // Char not fit, set error on istream
         is.setstate(ios::failbit);
 
     return is;

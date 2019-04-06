@@ -85,6 +85,9 @@ int main() {
       .CHECK_THROWS(istringstream("0.2[]") >> a)
       .CHECK_THROWS(istringstream("200g]") >> Gram)
       .CHECK_THROWS(istringstream("0.2[kgg]") >> a)
+      .CHECK_THROWS(istringstream("122.2kg") >> a)
+      .CHECK_THROWS(istringstream("1332.2[to n]") >> a)
+      .CHECK_THROWS(istringstream("[ton]1332.2") >> a)
 
 
 
