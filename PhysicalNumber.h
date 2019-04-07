@@ -34,9 +34,9 @@ public:
   bool operator==(const PhysicalNumber& b) const;
 
   PhysicalNumber& operator++();
-  PhysicalNumber& operator++(int);
+  PhysicalNumber operator++(int);
   PhysicalNumber& operator--();
-  PhysicalNumber& operator--(int);
+  PhysicalNumber operator--(int);
 
   friend istream& operator>>(istream& is, PhysicalNumber& a);
   friend ostream& operator<<(ostream& os, const PhysicalNumber& a);

@@ -62,7 +62,7 @@ PhysicalNumber &PhysicalNumber::operator++(){
 }
 
 // A++
-PhysicalNumber &PhysicalNumber::operator++(int){
+PhysicalNumber PhysicalNumber::operator++(int){
     PhysicalNumber temp(*this);
     value++;
     return temp;
@@ -75,7 +75,7 @@ PhysicalNumber &PhysicalNumber::operator--(){
 }
 
 // A--
-PhysicalNumber &PhysicalNumber::operator--(int){
+PhysicalNumber PhysicalNumber::operator--(int){
     PhysicalNumber temp(*this);
     value--;
     return temp;
