@@ -53,6 +53,7 @@ private:
   double addSubstruct(const PhysicalNumber &b);
   void normalize(double& a, double& b,const PhysicalNumber& other) const;
   istream& checkChar(istream& is, char check) const;
+  void errorStream(istream &is,ios::pos_type startPosition);
   void error(Unit other) const;
 
 };

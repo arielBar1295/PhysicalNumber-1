@@ -257,16 +257,21 @@ std::ostream &ariel::operator<<(ostream &os, const PhysicalNumber &a)
 // input operator, check input and insert if it's fits PhysicalNumber format
 std::istream &ariel::operator>>(istream &is, PhysicalNumber &a)
 {
+    ios::pos_type startPosition = is.tellg();
+
     double val;
     char check;
     string s;
-    if (!(is >> val) || !a.checkChar(is, '[') || !(is >> s))
-        throw std::runtime_error("String type not acceptable!");
+    if (!(is >> val) || !a.checkChar(is, '[') || !(is >> s)) {
+        a.errorStream(is,startPosition);
+        return is;
+    }
 
     int n = s.find(']');
-    if (n == -1)
-        throw std::runtime_error("String type not acceptable!");
-
+    if (n == -1) {
+        a.errorStream(is,startPosition);
+        return is;
+    }
     string checkName = s.substr(0, n);
 
     Unit un;
@@ -280,9 +285,9 @@ std::istream &ariel::operator>>(istream &is, PhysicalNumber &a)
             found = true;
         }
     }
-    if (!found)
-        throw std::runtime_error("String type not acceptable!");
-
+    if (!found) 
+        a.errorStream(is,startPosition);
+    
     return is;
 }
 // Check if expected char is equal to input char from user
@@ -296,4 +301,11 @@ istream &PhysicalNumber::checkChar(istream &is, char expected) const
         is.setstate(ios::failbit);
 
     return is;
+}
+
+  void PhysicalNumber::errorStream(istream &is,ios::pos_type startPosition) {
+    auto errorState = is.rdstate();
+    is.clear(); // clear error so seekg will work
+    is.seekg(startPosition); // rewind
+    is.clear(errorState); // set back the error flag
 }

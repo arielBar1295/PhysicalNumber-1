@@ -81,14 +81,13 @@ int main() {
       .CHECK_THROWS(MET -= c)
       .CHECK_THROWS(MET += c)
       .CHECK_THROWS(Gram < KM)
-      .CHECK_THROWS(istringstream("200[g") >> Gram)
-      .CHECK_THROWS(istringstream("0.2[]") >> a)
-      .CHECK_THROWS(istringstream("200g]") >> Gram)
-      .CHECK_THROWS(istringstream("0.2[kgg]") >> a)
-      .CHECK_THROWS(istringstream("122.2kg") >> a)
-      .CHECK_THROWS(istringstream("1332.2[to n]") >> a)
-      .CHECK_THROWS(istringstream("[ton]1332.2") >> a)
-
+      .CHECK_OK(istringstream("200[g") >> Gram)
+      .CHECK_OK(istringstream("0.2[]") >> a)
+      .CHECK_OK(istringstream("200g]") >> Gram)
+      .CHECK_OK(istringstream("0.2[kgg]") >> a)
+      .CHECK_OK(istringstream("122.2kg") >> a)
+      .CHECK_OK(istringstream("1332.2[to n]") >> a)
+      .CHECK_OK(istringstream("[ton]1332.2") >> a)
 
 
       .setname("Should work")
@@ -175,13 +174,13 @@ int main() {
       .CHECK_OUTPUT(c, "1000[m]")
 
 
-
       .print(cout, /*show_grade=*/false);
       grade = testcase.grade();
     } else {
       testcase.print_signal(signal);
       grade = 0;
     }
+
     cout <<  "*** Grade: " << grade << " ***" << endl;
     return grade;
 }
